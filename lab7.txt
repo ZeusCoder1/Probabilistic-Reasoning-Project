@@ -1,0 +1,49 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Target distribution (Gaussian)
+def target_distribution(x):
+    mu = 0  # Mean
+    sigma = 1  # Standard deviation
+    return np.exp(-0.5 * ((x - mu) / sigma) ** 2) / (sigma * np.sqrt(2 * np.pi))
+
+# Metropolis-Hastings algorithm
+def metropolis_hastings(target_func, num_samples, proposal_std=1.0):
+    # Initial value for the chain (starting point)
+    x = np.random.randn()
+    
+    # Store samples
+    samples = []
+    
+    for _ in range(num_samples):
+        # Propose a new sample from the proposal distribution
+        x_new = x + np.random.normal(0, proposal_std)
+        
+        # Compute acceptance probability
+        acceptance_ratio = target_func(x_new) / target_func(x)
+        
+        # Accept or reject the new sample
+        if np.random.rand() < acceptance_ratio:
+            x = x_new
+        
+        samples.append(x)
+    
+    return np.array(samples)
+
+# Parameters
+num_samples = 10000  # Number of samples to generate
+proposal_std = 1.0  # Standard deviation for the proposal distribution
+
+# Generate samples using Metropolis-Hastings
+samples = metropolis_hastings(target_distribution, num_samples, proposal_std)
+
+# Plot the results
+x = np.linspace(-4, 4, 100)
+plt.figure(figsize=(10, 6))
+plt.hist(samples, bins=50, density=True, alpha=0.6, label='Metropolis-Hastings samples')
+plt.plot(x, target_distribution(x), label='Target distribution (Gaussian)', lw=2)
+plt.title('Metropolis-Hastings Sampling')
+plt.xlabel('x')
+plt.ylabel('Density')
+plt.legend()
+plt.show()
