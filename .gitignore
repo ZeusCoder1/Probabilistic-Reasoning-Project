@@ -1,2 +1,10 @@
 *.csv
 *.exe
+*.py
+*.pptx
+test1.ipynb
+a.ipynb
+b.ipynb
+e.pdf
+The_ChatCPT_LSTM.ipynb
+The_LSTM_Approach.ipynb
